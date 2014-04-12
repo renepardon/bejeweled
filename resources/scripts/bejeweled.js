@@ -22,44 +22,62 @@ function Board() {
 Board.prototype.newGame = function() {
 	this.newBoard();
 	this.levelPoints = 0;
-	this.canvas.drawBoard(this.board);
+	this.canvas.drawBoard(this.grid);
 	this.canvas.drawTotalPoints(this.totalPoints);
 	this.canvas.drawLevelPoints(this.levelPoints);
 };
 
 Board.prototype.newBoard = function() {
-	this.board = new Array(SIZE);
+	this.grid = new Array(SIZE);
 	for (var i = 0; i < SIZE; i++) {
-		this.board[i] = new Array(SIZE);
+		this.grid[i] = new Array(SIZE);
 		for (var j = 0; j < SIZE; j++) {
 			var r = Math.floor(Math.random() * 10) % 7;
 			switch (r) {
 				case 0:
-					this.board[i][j] = new Jewel(i, j, JewelType.BLUE);
+					this.grid[i][j] = new Jewel(i, j, JewelType.BLUE);
 					break;
 				case 1:
-					this.board[i][j] = new Jewel(i, j, JewelType.GREEN);
+					this.grid[i][j] = new Jewel(i, j, JewelType.GREEN);
 					break;
 				case 2:
-					this.board[i][j] = new Jewel(i, j, JewelType.ORANGE);
+					this.grid[i][j] = new Jewel(i, j, JewelType.ORANGE);
 					break;
 				case 3:
-					this.board[i][j] = new Jewel(i, j, JewelType.PINK);
+					this.grid[i][j] = new Jewel(i, j, JewelType.PINK);
 					break;
 				case 4:
-					this.board[i][j] = new Jewel(i, j, JewelType.RED);
+					this.grid[i][j] = new Jewel(i, j, JewelType.RED);
 					break;
 				case 5:
-					this.board[i][j] = new Jewel(i, j, JewelType.WHITE);
+					this.grid[i][j] = new Jewel(i, j, JewelType.WHITE);
 					break;
 				case 6:
-					this.board[i][j] = new Jewel(i, j, JewelType.YELLOW);
+					this.grid[i][j] = new Jewel(i, j, JewelType.YELLOW);
 					break;
 				default:
 					break;
 			}
 		}
 	}
+};
+
+Board.prototype.swapJewels = function(a, b) {
+	if (!a.adjacentTo(b)) {
+		console.log(a.toString() + " not adjacent to " + b.toString());
+		return;
+	}
+	var tempX = a.x;
+	var tempY = a.y;
+	this.moveJewel(a, b.x, b.y);
+	this.moveJewel(b, tempX, tempY);
+};
+
+Board.prototype.moveJewel = function(jewel, x, y) {
+	jewel.x = x;
+	jewel.y = y;
+	this.grid[x][y] = jewel;
+	this.canvas.drawJewel(jewel);
 };
 
 Board.prototype.toString = function() {
@@ -71,7 +89,7 @@ Board.prototype.toString = function() {
 	for (var i = 0; i < SIZE; i++) {
 		result += "|";
 		for (var j = 0; j < SIZE; j++) {
-			result += this.board[i][j].type.code;
+			result += this.grid[i][j].type.code;
 		}
 		result += "|\n";
 	}
@@ -91,6 +109,13 @@ function Jewel(x, y, type) {
 Jewel.prototype.getNeighbors = function() {
 	// TODO
 	this.canvas.drawInfo("getting neighbors");
+};
+
+Jewel.prototype.adjacentTo = function(other) {
+	return (this.x == other.x && this.y == other.y + 1) ||
+		   (this.x == other.x && this.y == other.y - 1) ||
+		   (this.y == other.y && this.x == other.x + 1) ||
+		   (this.y == other.y && this.x == other.x - 1);
 };
 
 Jewel.prototype.toString = function() {

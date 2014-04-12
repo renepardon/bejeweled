@@ -8,22 +8,21 @@ $( document ).ready( function() {
 
 	console.log = function(message) {
 		console.olog(message);
-		$('#info').append(message + '</br>');
+		$('#info').append(message.replace(/\n/g, "<br />") + '</br>');
 	};
 	console.error = console.debug = console.info =  console.log
 });
 
 $(window).bind('keydown', function(event) {
-    if (event.ctrlKey || event.metaKey) {
-        switch (String.fromCharCode(event.which).toLowerCase()) {
-        case 'l':
-            event.preventDefault();
-            $("#info").html("");
-            break;
-
-		case 'b':
-			console.log("bejeweled here!");
-			break;
+	if (event.ctrlKey || event.metaKey) {
+		switch (String.fromCharCode(event.which).toLowerCase()) {
+		case 'l':
+			event.preventDefault();
+			$("#info").html("");
+		break;
+			case 'b':
+			console.log(board.toString());
+		break;
 		}
-    }
+	}
 });
