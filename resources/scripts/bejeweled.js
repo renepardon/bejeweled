@@ -1,14 +1,18 @@
 /* JEWEL TYPES */
 var JewelType = {
-	RED			: { name: "Red",		color: "ff0000",	code: 'R' },
-	GREEN		: { name: "Green",		color: "00ff00",	code: 'G' },
-	BLUE		: { name: "Blue",		color: "0000ff",	code: 'B' },
-	YELLOW		: { name: "Yellow",		color: "ffff00",	code: 'Y' },
-	UNDEFINED	: { name: "Undefined",	color: "000000",	code: '?' }
+	BLUE		: { name: "Blue",		code: 'B',	icon: 'blue.gif' },
+	GREEN		: { name: "Green",		code: 'G',	icon: 'green.gif' },
+	HYPERCUBE	: { name: "Hypercube",	code: 'H',	icon: 'hypercube.gif' },
+	ORANGE		: { name: "Orange",		code: 'O',	icon: 'orange.gif' },
+	PINK		: { name: "Pink",		code: 'P',	icon: 'pink.gif' },
+	RED			: { name: "Red",		code: 'R',	icon: 'red.gif' },
+	WHITE		: { name: "White",		code: 'W',	icon: 'white.gif' },
+	YELLOW		: { name: "Yellow",		code: 'Y',	icon: 'yellow.gif' },
+	UNDEFINED	: { name: "Undefined",	code: '?',	icon: null }
 };
 
 /* BOARD */
-SIZE = 10;
+SIZE = 8;
 
 function Board() {
 	this.canvas = new Canvas();
@@ -28,18 +32,27 @@ Board.prototype.newBoard = function() {
 	for (var i = 0; i < SIZE; i++) {
 		this.board[i] = new Array(SIZE);
 		for (var j = 0; j < SIZE; j++) {
-			var r = Math.floor(Math.random() * 10) % 4;
+			var r = Math.floor(Math.random() * 10) % 7;
 			switch (r) {
 				case 0:
-					this.board[i][j] = new Jewel(i, j, JewelType.RED);
+					this.board[i][j] = new Jewel(i, j, JewelType.BLUE);
 					break;
 				case 1:
 					this.board[i][j] = new Jewel(i, j, JewelType.GREEN);
 					break;
 				case 2:
-					this.board[i][j] = new Jewel(i, j, JewelType.BLUE);
+					this.board[i][j] = new Jewel(i, j, JewelType.ORANGE);
 					break;
 				case 3:
+					this.board[i][j] = new Jewel(i, j, JewelType.PINK);
+					break;
+				case 4:
+					this.board[i][j] = new Jewel(i, j, JewelType.RED);
+					break;
+				case 5:
+					this.board[i][j] = new Jewel(i, j, JewelType.WHITE);
+					break;
+				case 6:
 					this.board[i][j] = new Jewel(i, j, JewelType.YELLOW);
 					break;
 				default:

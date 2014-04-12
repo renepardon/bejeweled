@@ -1,3 +1,5 @@
+var IMG_DIR = "resources/images/";
+
 function Canvas() {
 	this.resetBoard();
 	this.resetTotalPoints();
@@ -30,7 +32,8 @@ Canvas.prototype.drawBoard = function(board) {
 	var boardDiv = $("#board");
 	for (var i = 0; i < SIZE; i++) {
 		for (var j = 0; j < SIZE; j++) {
-			$("#boardTable tr:eq(" + i + ") td:eq(" + j + ")").html(board[i][j].type.code);
+			var img = image(IMG_DIR + board[i][j].type.icon);
+			$("#boardTable tr:eq(" + i + ") td:eq(" + j + ")").html(img);
 		}
 	}
 };
@@ -46,5 +49,10 @@ Canvas.prototype.drawLevelPoints = function(points) {
 Canvas.prototype.drawJewel = function(jewel) {
 	var x = jewel.x;
 	var y = jewel.y;
-	$("#boardTable tr:eq(" + x + ") td:eq(" + y + ")").html(jewel.type.code);
+	var img = image(IMG_DIR + jewel.type.icon);
+	$("#boardTable tr:eq(" + x + ") td:eq(" + y + ")").html(img);
 };
+
+function image(img_path) {
+	return "<img src=\"" + img_path + "\" />";
+}
