@@ -1,0 +1,38 @@
+body {
+	background-color: white;
+	font-family: "Courier New";
+	color: grey;
+    text-align: center;
+}
+
+img.middle {
+	vertical-align: middle;
+}
+
+#content {
+	width: 100%;
+}
+
+#left, #right {
+	float: left;
+	width: 65%;
+}
+
+#right {
+	float: right;
+	width: 35%;
+}
+
+#board {
+	margin: 35px;
+}
+
+#info {
+	margin: 35px;
+}
+
+#footer {
+	margin: 35px;
+	position:fixed;
+	bottom:0px;
+}

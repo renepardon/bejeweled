@@ -8,21 +8,26 @@ var JewelType = {
 };
 
 /* BOARD */
+SIZE = 10;
+
 function Board() {
-	this.LINES = 10;
-	this.COLUMNS = 10;
+	this.canvas = new Canvas();
+	this.totalPoints = 0;
 };
 
 Board.prototype.newGame = function() {
-	this.emptyBoard();
-	console.log(this.toString());
+	this.newBoard();
+	this.levelPoints = 0;
+	this.canvas.drawBoard(this.board);
+	this.canvas.drawTotalPoints(this.totalPoints);
+	this.canvas.drawLevelPoints(this.levelPoints);
 };
 
-Board.prototype.emptyBoard = function() {
-	this.board = new Array(this.LINES);
-	for (var i = 0; i < this.LINES; i++) {
-		this.board[i] = new Array(this.COLUMNS);
-		for (var j = 0; j < this.COLUMNS; j++) {
+Board.prototype.newBoard = function() {
+	this.board = new Array(SIZE);
+	for (var i = 0; i < SIZE; i++) {
+		this.board[i] = new Array(SIZE);
+		for (var j = 0; j < SIZE; j++) {
 			var r = Math.floor(Math.random() * 10) % 4;
 			switch (r) {
 				case 0:
@@ -46,18 +51,18 @@ Board.prototype.emptyBoard = function() {
 
 Board.prototype.toString = function() {
 	var result = "";
-	for (var k = 0; k < this.COLUMNS + 2; k++) {
+	for (var k = 0; k < SIZE + 2; k++) {
 		result += "-";
 	}
 	result += "\n";
-	for (var i = 0; i < this.LINES; i++) {
+	for (var i = 0; i < SIZE; i++) {
 		result += "|";
-		for (var j = 0; j < this.COLUMNS; j++) {
+		for (var j = 0; j < SIZE; j++) {
 			result += this.board[i][j].type.code;
 		}
 		result += "|\n";
 	}
-	for (k = 0; k < this.COLUMNS + 2; k++) {
+	for (k = 0; k < SIZE + 2; k++) {
 		result += "-";
 	}
 	return result;
@@ -70,21 +75,9 @@ function Jewel(x, y, type) {
 	this.type = type;
 };
 
-Jewel.prototype.getType = function() {
-	return this.type;
-};
-	
-Jewel.prototype.getX = function() {
-	return this.x;
-};
-	
-Jewel.prototype.getY = function() {
-	return this.y;
-};
-
 Jewel.prototype.getNeighbors = function() {
 	// TODO
-	console.log("getting neighbors");
+	this.canvas.drawInfo("getting neighbors");
 };
 
 Jewel.prototype.toString = function() {
