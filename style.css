@@ -36,3 +36,7 @@ img.middle {
 	position:fixed;
 	bottom:0px;
 }
+
+td { 
+    padding: 10px;
+}

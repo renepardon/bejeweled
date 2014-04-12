@@ -83,7 +83,3 @@ Jewel.prototype.getNeighbors = function() {
 Jewel.prototype.toString = function() {
 	return this.type.name + " jewel at (" + this.x + "," + this.y + ")";
 };
-
-/* RUN */
-var board = new Board();
-board.newGame();
