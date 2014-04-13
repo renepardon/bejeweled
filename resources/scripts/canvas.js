@@ -24,7 +24,7 @@ Canvas.prototype.listenClicks = function() {
 
 Canvas.prototype.resetBoard = function() {
 	var boardDiv = $("#board");
-	var table = "<table id=\"boardTable\" border=\"1\">";
+	var table = "<table id=\"boardTable\">";
 	for (var i = 0; i < SIZE; i++) {
 		table += "<tr>\n";
 		for (var j = 0; j < SIZE; j++) {

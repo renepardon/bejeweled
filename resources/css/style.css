@@ -52,3 +52,7 @@ table td  img{
 	display: inline-block;
 	white-space: nowrap;
 }
+
+td, tr {
+	border: 0;
+}
