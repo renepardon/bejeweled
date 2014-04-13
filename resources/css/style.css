@@ -25,6 +25,7 @@ body {
 
 #info {
 	margin: 35px;
+	width: 343px;
 	height: 380px;
 	border: 1px solid grey;
 	overflow-y: scroll;

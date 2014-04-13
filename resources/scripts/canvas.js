@@ -62,8 +62,12 @@ Canvas.prototype.drawLevelPoints = function(points) {
 
 Canvas.prototype.drawJewel = function(jewel) {
 	var img = image(IMG_DIR + jewel.type.icon);
-	$("#boardTable tr:eq(" + jewel.x + ") td:eq(" + jewel.y + ")").html(img);
+	$("#boardTable tr:eq(" + jewel.x + ") td:eq(" + jewel.y + ")").hide().html(img).fadeIn();
 };
+
+Canvas.prototype.blank = function(jewel) {
+	$("#boardTable tr:eq(" + jewel.x + ") td:eq(" + jewel.y + ")").hide().html("lol").fadeIn();
+}
 
 function image(img_path) {
 	return "<img src=\"" + img_path + "\" />";

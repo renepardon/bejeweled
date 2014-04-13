@@ -8,7 +8,7 @@ var JewelType = {
 	RED			: { name: "Red",		code: 'R',	icon: 'red.gif' },
 	WHITE		: { name: "White",		code: 'W',	icon: 'white.gif' },
 	YELLOW		: { name: "Yellow",		code: 'Y',	icon: 'yellow.gif' },
-	UNDEFINED	: { name: "Undefined",	code: '?',	icon: null }
+	UNDEFINED	: { name: "Undefined",	code: '?',	icon: 'undefined.gif' }
 };
 
 /* BOARD */
@@ -17,6 +17,8 @@ SIZE = 8;
 function Board() {
 	this.canvas = new Canvas();
 	this.totalPoints = 0;
+	this.levelPoints = 0;
+	this.movePoints = 0;
 };
 
 Board.prototype.newGame = function() {
@@ -32,45 +34,32 @@ Board.prototype.newBoard = function() {
 	for (var i = 0; i < SIZE; i++) {
 		this.grid[i] = new Array(SIZE);
 		for (var j = 0; j < SIZE; j++) {
-			var r = Math.floor(Math.random() * 10) % 7;
-			switch (r) {
-				case 0:
-					this.grid[i][j] = new Jewel(i, j, JewelType.BLUE);
-					break;
-				case 1:
-					this.grid[i][j] = new Jewel(i, j, JewelType.GREEN);
-					break;
-				case 2:
-					this.grid[i][j] = new Jewel(i, j, JewelType.ORANGE);
-					break;
-				case 3:
-					this.grid[i][j] = new Jewel(i, j, JewelType.PINK);
-					break;
-				case 4:
-					this.grid[i][j] = new Jewel(i, j, JewelType.RED);
-					break;
-				case 5:
-					this.grid[i][j] = new Jewel(i, j, JewelType.WHITE);
-					break;
-				case 6:
-					this.grid[i][j] = new Jewel(i, j, JewelType.YELLOW);
-					break;
-				default:
-					break;
-			}
+			this.grid[i][j] = this.newJewel(i, j);
 		}
 	}
 };
 
 Board.prototype.swapJewels = function(a, b) {
-	if (!a.adjacentTo(b)) {
-		console.log(a.toString() + " not adjacent to " + b.toString());
+	if (a.type == b.type || !a.adjacentTo(b)) {
+		a = b = null;
 		return;
 	}
+	this.switch(a, b);
+	if (this.movePoints == 0) {
+		this.switch(a, b);
+	} else {
+		this.levelPoints += this.movePoints;
+		console.log("level points: " + this.levelPoints);
+	}
+};
+
+Board.prototype.switch = function(a, b) {
 	var tempX = a.x;
 	var tempY = a.y;
 	this.moveJewel(a, b.x, b.y);
 	this.moveJewel(b, tempX, tempY);
+	this.tryToExplode(a);
+	this.tryToExplode(b);
 };
 
 Board.prototype.moveJewel = function(jewel, x, y) {
@@ -78,6 +67,123 @@ Board.prototype.moveJewel = function(jewel, x, y) {
 	jewel.y = y;
 	this.grid[x][y] = jewel;
 	this.canvas.drawJewel(jewel);
+};
+
+Board.prototype.tryToExplode = function(jewel) {
+	var toExplode = new Array();
+	// grab the ones we can explode horizontally
+	// left to the jewel
+	for (var j = jewel.y - 1; j >= 0 && jewel.type == this.grid[jewel.x][j].type; j--) {
+		toExplode.push(this.grid[jewel.x][j]);
+	}
+	// the jewel itself
+	toExplode.push(jewel);
+	// right to the jewel
+	for (var j = jewel.y + 1; j < SIZE && jewel.type == this.grid[jewel.x][j].type; j++) {
+		toExplode.push(this.grid[jewel.x][j]);
+	}
+	// if we have stuff to explode
+	if (toExplode.length >= 3) {
+		this.explode(toExplode);
+		return;
+	}
+
+	toExplode = new Array();
+	// grab the ones we can explode vertically
+	// above the jewel
+	for (var i = jewel.x - 1; i >= 0 && jewel.type == this.grid[i][jewel.y].type; i--) {
+		toExplode.push(this.grid[i][jewel.y]);
+	}
+	// the jewel itself
+	toExplode.push(jewel);
+	// below the jewel
+	for (var i = jewel.x + 1; i < SIZE && jewel.type == this.grid[i][jewel.y].type; i++) {
+		toExplode.push(this.grid[i][jewel.y]);
+	}
+	// if we have stuff to explode
+	if (toExplode.length >= 3) {
+		this.explode(toExplode);
+		return;
+	}
+};
+
+Board.prototype.explode = function(toExplode) {
+	console.log(toExplode.toString());
+	// at this point, we know that toExplode is ordered left-right or up-down
+	if (toExplode[0].x == toExplode[1].x) {
+		var x = toExplode[0].x;
+		var minY = toExplode[0].y;
+		for (var i = 1; i < toExplode.length; i++) {
+			if (toExplode[i].y < minY) {
+				minY = toExplode[i].y;
+			}
+		}
+		console.log("minY: " + minY);
+		if (x != 0) {
+			// we are exploding horizontally
+			for (var k = 0; k < toExplode.length; k++) {
+				for (var i = x - 1; i >= 0; i--) {
+					console.log("moving (" + i + "," + (minY + k) + ") to (" + (i + 1) + "," + (minY + k) + ")");
+					this.moveJewel(this.grid[i][minY + k], i + 1, minY + k);
+				}
+			}
+		}
+		this.newRow(minY, toExplode.length);
+	} else {
+		var minX = toExplode[0].x;
+		var y = toExplode[0].y;
+		for (var i = 1; i < toExplode.length; i++) {
+			if (toExplode[i].x < minX) {
+				minX = toExplode[i].x;
+			}
+		}
+		console.log("minX: " + minX);
+		// we are exploding vertically
+		for (var i = minX - 1; i >= 0; i--) {
+			this.moveJewel(this.grid[i][y], i + toExplode.length, y);
+		}
+		this.newColumn(y, toExplode.length);
+	}
+	this.movePoints += toExplode.length;
+};
+
+Board.prototype.newRow = function(minY, n) {
+	console.log("new row for minY: " + minY + " n: " + n);
+	for (var k = 0; k < n; k++) {
+		var jewel = this.newJewel(0, minY + k);
+		this.grid[0][minY + k] = jewel;
+		this.canvas.drawJewel(jewel);
+	}
+};
+
+Board.prototype.newColumn = function(y, n) {
+	for (var i = 0; i < n; i++) {
+		var jewel = this.newJewel(i, y);
+		this.grid[i][y] = jewel;
+		this.canvas.drawJewel(jewel);
+	}
+};
+
+Board.prototype.newJewel = function(x, y) {
+	var r = Math.floor(Math.random() * 10) % 7;
+	switch (r) {
+		case 0:
+			return new Jewel(x, y, JewelType.BLUE);
+		case 1:
+			return new Jewel(x, y, JewelType.GREEN);
+		case 2:
+			return new Jewel(x, y, JewelType.ORANGE);
+		case 3:
+			return new Jewel(x, y, JewelType.PINK);
+		case 4:
+			return new Jewel(x, y, JewelType.RED);
+		case 5:
+			return new Jewel(x, y, JewelType.WHITE);
+		case 6:
+			return new Jewel(x, y, JewelType.YELLOW);
+		default:
+			break;
+	}
 };
 
 Board.prototype.toString = function() {
