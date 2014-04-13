@@ -62,12 +62,21 @@ Canvas.prototype.drawLevelPoints = function(points) {
 
 Canvas.prototype.drawJewel = function(jewel) {
 	var img = image(IMG_DIR + jewel.type.icon);
-	$("#boardTable tr:eq(" + jewel.x + ") td:eq(" + jewel.y + ")").hide().html(img).fadeIn();
+	var cell = this.getCell(jewel.x, jewel.y);
+	cell.html("").html(img).fadeIn(500);
 };
 
-Canvas.prototype.blank = function(jewel) {
-	$("#boardTable tr:eq(" + jewel.x + ") td:eq(" + jewel.y + ")").hide().html("lol").fadeIn();
-}
+Canvas.prototype.highlightExplosion = function(toExplode) {
+	for (var i = 0; i < toExplode.length; i++) {
+		var jewel = toExplode[i];
+		var cell = this.getCell(jewel.x, jewel.y);
+		cell.hide().fadeIn(500);
+	}
+};
+
+Canvas.prototype.getCell = function(x, y) {
+	return $("#boardTable tr:eq(" + x + ") td:eq(" + y + ")");
+};
 
 function image(img_path) {
 	return "<img src=\"" + img_path + "\" />";

@@ -49,6 +49,7 @@ Board.prototype.swapJewels = function(a, b) {
 		this.switch(a, b);
 	} else {
 		this.levelPoints += this.movePoints;
+		this.movePoints = 0;
 		console.log("level points: " + this.levelPoints);
 	}
 };
@@ -84,6 +85,7 @@ Board.prototype.tryToExplode = function(jewel) {
 	}
 	// if we have stuff to explode
 	if (toExplode.length >= 3) {
+		console.log("gonna explode horizontally: " + toExplode.toString());
 		this.explode(toExplode);
 		return;
 	}
@@ -102,13 +104,15 @@ Board.prototype.tryToExplode = function(jewel) {
 	}
 	// if we have stuff to explode
 	if (toExplode.length >= 3) {
+		console.log("gonna explode vertically: " + toExplode.toString());
 		this.explode(toExplode);
 		return;
 	}
 };
 
 Board.prototype.explode = function(toExplode) {
-	console.log(toExplode.toString());
+	this.canvas.highlightExplosion(toExplode);
+	console.log("exploding: " + toExplode.toString());
 	// at this point, we know that toExplode is ordered left-right or up-down
 	if (toExplode[0].x == toExplode[1].x) {
 		var x = toExplode[0].x;
@@ -212,11 +216,6 @@ function Jewel(x, y, type) {
 	this.type = type;
 };
 
-Jewel.prototype.getNeighbors = function() {
-	// TODO
-	this.canvas.drawInfo("getting neighbors");
-};
-
 Jewel.prototype.adjacentTo = function(other) {
 	return (this.x == other.x && this.y == other.y + 1) ||
 		   (this.x == other.x && this.y == other.y - 1) ||
@@ -225,5 +224,5 @@ Jewel.prototype.adjacentTo = function(other) {
 };
 
 Jewel.prototype.toString = function() {
-	return this.type.name + " jewel at (" + this.x + "," + this.y + ")";
+	return this.type.code + ":(" + this.x + "," + this.y + ")";
 };
