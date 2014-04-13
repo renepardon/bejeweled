@@ -3,7 +3,7 @@ bejeweled
 
 JavaScript version of the bejeweled game
 
-Try it out [here](https://dnlserrano.github.io/bejeweled/)!
+Try it out [here](http://dnlserrano.github.io/bejeweled/)!
 
 TODO:
 
