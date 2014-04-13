@@ -1,30 +1,31 @@
 var IMG_DIR = "resources/images/";
-var a = null;
-var b = null;
 
 function Canvas() {
 	this.resetBoard();
 	this.listenClicks();
-	this.resetTotalPoints();
-	this.resetLevelPoints();
+	this.resetScore();
+	// variables to store jewels to be swapped
+	this.a = null;
+	this.b = null;
 };
 
 Canvas.prototype.listenClicks = function() {
 	for (var i = 0; i < SIZE; i++) {
 		for (var j = 0; j < SIZE; j++) {
-			var cell = $("#boardTable tr:eq(" + i + ") td:eq(" + j + ")");
+			var cell = this.getCell(i, j);
+			var self = this;
 			cell.click(function(){
 				var x = $(this).parent().parent().children().index($(this).parent());
 				var y = $(this).parent().children().index($(this));
-				swapJewels(x, y);
+				self.swapJewels(x, y);
 			});
 		}
 	}
 };
 
 Canvas.prototype.resetBoard = function() {
-	var boardDiv = $("#board");
-	var table = "<table id=\"boardTable\">";
+	var boardDiv = $("#content");
+	var table = "<table id=\"board_table\">";
 	for (var i = 0; i < SIZE; i++) {
 		table += "<tr>\n";
 		for (var j = 0; j < SIZE; j++) {
@@ -36,29 +37,49 @@ Canvas.prototype.resetBoard = function() {
 	boardDiv.append(table);
 };
 
-Canvas.prototype.resetTotalPoints = function() {
-};
-
-Canvas.prototype.resetLevelPoints = function() {
+Canvas.prototype.resetScore = function() {
+	var boardDiv = $("#content");
+	var score = "<div id=\"level_complete\"></div>";
+	score += "<table id=\"score_table\">";
+	// level
+		score += "<tr>\n";
+			score += "<td align=\"left\">Level:</td>\n";
+			score += "<td align=\"right\" id=\"level\">0</td>\n";
+		score += "</tr>\n";
+	// total points
+		score += "<tr>\n";
+			score += "<td align=\"left\">Total points:</td>\n";
+			score += "<td align=\"right\" id=\"total_points\">0</td>\n";
+		score += "</tr>\n";
+	score += "</table>";
+	boardDiv.prepend(score);
 };
 
 Canvas.prototype.drawBoard = function(grid) {
-	var boardDiv = $("#board");
+	var boardDiv = $("#content");
 	for (var i = 0; i < SIZE; i++) {
 		for (var j = 0; j < SIZE; j++) {
 			var img = image(IMG_DIR + grid[i][j].type.icon);
-			$("#boardTable tr:eq(" + i + ") td:eq(" + j + ")").html(img);
+			this.getCell(i, j).html(img);
 		}
 	}
 };
 
-Canvas.prototype.drawTotalPoints = function(points) {
-	$("#totalPoints").html(points);
-}
+Canvas.prototype.drawLevel = function(level) {
+	$("#level").html(level);
+};
 
-Canvas.prototype.drawLevelPoints = function(points) {
-	$("#levelPoints").html(points);
-}
+Canvas.prototype.drawTotalPoints = function(totalPoints) {
+	$("#total_points").html(totalPoints);
+};
+
+Canvas.prototype.levelComplete = function(level) {
+	var levelCompleteDiv = $("#level_complete");
+	levelCompleteDiv.html("LEVEL " + level + " COMPLETED");
+	levelCompleteDiv.fadeOut(2000, function() {
+		levelCompleteDiv.html("").fadeIn();
+	});
+};
 
 Canvas.prototype.drawJewel = function(jewel) {
 	var img = image(IMG_DIR + jewel.type.icon);
@@ -75,21 +96,21 @@ Canvas.prototype.highlightExplosion = function(toExplode) {
 };
 
 Canvas.prototype.getCell = function(x, y) {
-	return $("#boardTable tr:eq(" + x + ") td:eq(" + y + ")");
+	return $("#board_table tr:eq(" + x + ") td:eq(" + y + ")");
+};
+
+Canvas.prototype.swapJewels = function(x, y) {
+	console.log(x + " " + y);
+	if (this.a == null) {
+		this.a = board.grid[x][y];
+	} else if (this.a != null && this.b == null) {
+		this.b = board.grid[x][y];
+		board.swapJewels(this.a, this.b);
+		this.a = null;
+		this.b = null;
+	}
 };
 
 function image(img_path) {
 	return "<img src=\"" + img_path + "\" />";
-}
-
-function swapJewels(x, y) {
-	console.log(x + " " + y);
-	if (a == null) {
-		a = board.grid[x][y];
-	} else if (a != null && b == null) {
-		b = board.grid[x][y];
-		board.swapJewels(a, b);
-		a = null;
-		b = null;
-	}
 }

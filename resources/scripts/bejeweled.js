@@ -16,17 +16,19 @@ SIZE = 8;
 
 function Board() {
 	this.canvas = new Canvas();
-	this.totalPoints = 0;
+	this.level = 0;
 	this.levelPoints = 0;
+	this.totalPoints = 0;
 	this.movePoints = 0;
+	this.newGame();
 };
 
 Board.prototype.newGame = function() {
 	this.newBoard();
+	this.level++;
 	this.levelPoints = 0;
 	this.canvas.drawBoard(this.grid);
-	this.canvas.drawTotalPoints(this.totalPoints);
-	this.canvas.drawLevelPoints(this.levelPoints);
+	this.canvas.drawLevel(this.level);
 };
 
 Board.prototype.newBoard = function() {
@@ -48,9 +50,7 @@ Board.prototype.swapJewels = function(a, b) {
 	if (this.movePoints == 0) {
 		this.switch(a, b);
 	} else {
-		this.levelPoints += this.movePoints;
-		this.movePoints = 0;
-		console.log("level points: " + this.levelPoints);
+		this.updateScore(this.movePoints);
 	}
 };
 
@@ -68,6 +68,17 @@ Board.prototype.moveJewel = function(jewel, x, y) {
 	jewel.y = y;
 	this.grid[x][y] = jewel;
 	this.canvas.drawJewel(jewel);
+};
+
+Board.prototype.updateScore = function(movePoints) {
+	this.levelPoints += movePoints;
+	this.totalPoints += movePoints;
+	this.canvas.drawTotalPoints(this.totalPoints);
+	this.movePoints = 0;
+	if (this.levelPoints >= SIZE * this.level) {
+		this.canvas.levelComplete(this.level);
+		this.newGame();
+	}
 };
 
 Board.prototype.tryToExplode = function(jewel) {
@@ -152,7 +163,6 @@ Board.prototype.explode = function(toExplode) {
 };
 
 Board.prototype.newRow = function(minY, n) {
-	console.log("new row for minY: " + minY + " n: " + n);
 	for (var k = 0; k < n; k++) {
 		var jewel = this.newJewel(0, minY + k);
 		this.grid[0][minY + k] = jewel;

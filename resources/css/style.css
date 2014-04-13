@@ -3,40 +3,29 @@ body {
 	font-family: "Courier New";
 	color: grey;
 	text-align: center;
+	margin:0;
+	padding:0;
 }
 
 #content {
-	width: 100%;
+	margin-top: 35px;
 }
 
-#left, #right {
-	float: left;
-	width: 65%;
+#score_table {
+	margin-bottom: 3px;
+	width: 338px;
 }
 
-#right {
-	float: right;
-	width: 35%;
-}
-
-#board {
-	margin: 35px;
-}
-
-#info {
-	margin: 35px;
-	width: 343px;
-	height: 380px;
-	border: 1px solid grey;
-	overflow-y: scroll;
-	text-align: left;
-	font-size: 11px;
+#level_complete {
+	margin-bottom: 10px;
+	font-size: 14px;
+	font-weight: bold;
+	min-height: 17px;
 }
 
 #footer {
-	margin: 35px;
 	position:fixed;
-	bottom:0px;
+	bottom: 20px;
 	width: 100%;
 }
 
