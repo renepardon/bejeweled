@@ -46,8 +46,12 @@ Board.prototype.swapJewels = function(a, b) {
 		a = b = null;
 		return;
 	}
+	console.log("switching!");
 	this.switch(a, b);
+	this.tryToExplode(a);
+	this.tryToExplode(b);
 	if (this.movePoints == 0) {
+		console.log("no points... ");
 		this.switch(a, b);
 	} else {
 		this.updateScore(this.movePoints);
@@ -57,10 +61,12 @@ Board.prototype.swapJewels = function(a, b) {
 Board.prototype.switch = function(a, b) {
 	var tempX = a.x;
 	var tempY = a.y;
+	console.log("a before: " + a.toString());
+	console.log("b before: " + b.toString());
 	this.moveJewel(a, b.x, b.y);
 	this.moveJewel(b, tempX, tempY);
-	this.tryToExplode(a);
-	this.tryToExplode(b);
+	console.log("a after: " + a.toString());
+	console.log("b after: " + b.toString());
 };
 
 Board.prototype.moveJewel = function(jewel, x, y) {

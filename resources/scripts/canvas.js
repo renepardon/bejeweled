@@ -56,7 +56,6 @@ Canvas.prototype.resetScore = function() {
 };
 
 Canvas.prototype.drawBoard = function(grid) {
-	var boardDiv = $("#content");
 	for (var i = 0; i < SIZE; i++) {
 		for (var j = 0; j < SIZE; j++) {
 			var img = image(IMG_DIR + grid[i][j].type.icon);
@@ -76,8 +75,11 @@ Canvas.prototype.drawTotalPoints = function(totalPoints) {
 Canvas.prototype.levelComplete = function(level) {
 	var levelCompleteDiv = $("#level_complete");
 	levelCompleteDiv.html("LEVEL " + level + " COMPLETED");
-	levelCompleteDiv.fadeOut(2000, function() {
-		levelCompleteDiv.html("").fadeIn();
+	$("#board_table").fadeOut(2000, function() {
+		$("#board_table").fadeIn();
+		levelCompleteDiv.fadeOut(2000, function() {
+			levelCompleteDiv.html("").fadeIn();
+		});
 	});
 };
 
