@@ -3,6 +3,8 @@ bejeweled
 
 JavaScript version of the bejeweled game
 
+[![Codacy Badge](https://www.codacy.com/project/badge/304e897b7a7f4d16b9391391d023501e)](https://www.codacy.com/public/danieljdserrano/bejeweled)
+
 Try it out [here](http://dnlserrano.github.io/bejeweled/)!
 
 TODO:
