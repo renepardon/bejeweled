@@ -1,0 +1,49 @@
+body {
+  background-color: white;
+  font-family: "Verdana";
+  color: #888888;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+table {
+  border: 1px solid #c0c0c0;
+  border-collapse: collapse;
+
+  td {
+    img {
+      width: 40px;
+      height: 40px;
+      overflow: hidden;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    tr {
+      border: 0;
+    }
+  }
+}
+
+#content {
+  margin-top: 35px;
+}
+
+#score-table {
+  margin-bottom: 3px;
+  width: 338px;
+}
+
+#level-complete {
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  min-height: 17px;
+}
+
+#footer {
+  position: fixed;
+  bottom: 20px;
+  width: 100%;
+}
